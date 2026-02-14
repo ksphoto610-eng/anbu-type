@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Anbu Type Writing Institute</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Righteous&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #00f2fe 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        /* Header */
+        .dashboard-header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 30px 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: slideDown 0.8s ease-out;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .header-left h1 {
+            font-family: 'Righteous', cursive;
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 5px;
+        }
+        
+        .header-left p {
+            color: #666;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        .header-right {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .logout-btn,
+        .export-btn,
+        .clear-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .logout-btn {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+            color: white;
+        }
+        
+        .export-btn {
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+            color: white;
+        }
+        
+        .clear-btn {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+        }
+        
+        .logout-btn:hover,
+        .export-btn:hover,
+        .clear-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Stats Cards */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.8s ease-out 0.2s backwards;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                transform: translateY(40px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1, #f7dc6f);
+            background-size: 200% 100%;
+            animation: gradientMove 3s linear infinite;
+        }
+        
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+        
+        .stat-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        /* Search and Filter */
+        .controls-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            animation: fadeInUp 0.8s ease-out 0.4s backwards;
+        }
+        
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .control-group label {
+            display: block;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+        
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        input[type="text"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+        
+        /* Table Section */
+        .table-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            animation: fadeInUp 0.8s ease-out 0.6s backwards;
+            overflow-x: auto;
+        }
+        
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .table-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+        
+        thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        thead th {
+            color: white;
+            padding: 18px 15px;
+            text-align: left;
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        
+        thead th:first-child {
+            border-radius: 12px 0 0 0;
+        }
+        
+        thead th:last-child {
+            border-radius: 0 12px 0 0;
+        }
+        
+        tbody tr {
+            border-bottom: 2px solid #f0f0f0;
+            transition: all 0.3s ease;
+        }
+        
+        tbody tr:hover {
+            background: #f8f9ff;
+            transform: scale(1.01);
+        }
+        
+        tbody td {
+            padding: 18px 15px;
+            color: #333;
+            font-size: 0.95rem;
+        }
+        
+        .category-badge {
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            display: inline-block;
+        }
+        
+        .category-school {
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+            color: white;
+        }
+        
+        .category-college {
+            background: linear-gradient(135deg, #4ecdc4, #44a08d);
+            color: white;
+        }
+        
+        .category-employee {
+            background: linear-gradient(135deg, #45b7d1, #2196f3);
+            color: white;
+        }
+        
+        .delete-btn {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+        }
+        
+        .delete-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+        
+        .no-data {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+        
+        .no-data-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-header {
+                padding: 20px;
+            }
+            
+            .header-left h1 {
+                font-size: 1.8rem;
+            }
+            
+            .header-right {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .controls-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="dashboard-header">
+            <div class="header-left">
+                <h1>🎯 Admin Dashboard</h1>
+                <p>Anbu Type Writing Institute</p>
+            </div>
+            <div class="header-right">
+                <button class="export-btn" onclick="exportToCSV()">📥 Export CSV</button>
+                <button class="clear-btn" onclick="clearAllData()">🗑️ Clear All</button>
+                <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+            </div>
+        </div>
+        
+        <!-- Stats Cards -->
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-icon">👥</div>
+                <div class="stat-number" id="totalCount">0</div>
+                <div class="stat-label">Total Registrations</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🏫</div>
+                <div class="stat-number" id="schoolCount">0</div>
+                <div class="stat-label">School Students</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🎓</div>
+                <div class="stat-number" id="collegeCount">0</div>
+                <div class="stat-label">College Students</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">💼</div>
+                <div class="stat-number" id="employeeCount">0</div>
+                <div class="stat-label">Employees</div>
+            </div>
+        </div>
+        
+        <!-- Search and Filter -->
+        <div class="controls-section">
+            <div class="controls-grid">
+                <div class="control-group">
+                    <label>🔍 Search by Name</label>
+                    <input type="text" id="searchInput" placeholder="Type to search..." onkeyup="filterTable()">
+                </div>
+                <div class="control-group">
+                    <label>📚 Filter by Category</label>
+                    <select id="categoryFilter" onchange="filterTable()">
+                        <option value="">All Categories</option>
+                        <option value="School">School</option>
+                        <option value="College">College</option>
+                        <option value="Employee">Employee</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>📅 Filter by Batch</label>
+                    <select id="batchFilter" onchange="filterTable()">
+                        <option value="">All Batches</option>
+                        <option value="Morning">Morning Batch</option>
+                        <option value="Day">Day Batch</option>
+                        <option value="Afternoon">Afternoon Batch</option>
+                        <option value="Evening">Evening Batch</option>
+                        <option value="Weekend">Weekend Batch</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Table -->
+        <div class="table-container">
+            <div class="table-header">
+                <h2 class="table-title">📋 All Registrations</h2>
+            </div>
+            <div id="tableContent"></div>
+        </div>
+    </div>
+    
+    <script>
+        // Check if admin is logged in
+        if (localStorage.getItem('adminLoggedIn') !== 'true') {
+            window.location.href = 'admin_login.html';
+        }
+        
+        let allRegistrations = [];
+        
+        // Load data on page load
+        window.onload = function() {
+            loadRegistrations();
+            updateStats();
+        };
+        
+        function loadRegistrations() {
+            allRegistrations = JSON.parse(localStorage.getItem('allRegistrations')) || [];
+            displayTable(allRegistrations);
+        }
+        
+        function displayTable(data) {
+            const tableContent = document.getElementById('tableContent');
+            
+            if (data.length === 0) {
+                tableContent.innerHTML = `
+                    <div class="no-data">
+                        <div class="no-data-icon">📭</div>
+                        <div>No registrations found</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            let tableHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Father's Name</th>
+                            <th>Category</th>
+                            <th>Batch</th>
+                            <th>Time</th>
+                            <th>Registered On</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            data.forEach((student, index) => {
+                const categoryClass = `category-${student.category.toLowerCase()}`;
+                tableHTML += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td><strong>${student.name}</strong></td>
+                        <td>${student.fatherName}</td>
+                        <td><span class="category-badge ${categoryClass}">${student.category}</span></td>
+                        <td>${student.batch}</td>
+                        <td>${student.time}</td>
+                        <td>${student.registeredDate || 'N/A'}</td>
+                        <td><button class="delete-btn" onclick="deleteRegistration(${student.id})">Delete</button></td>
+                    </tr>
+                `;
+            });
+            
+            tableHTML += `
+                    </tbody>
+                </table>
+            `;
+            
+            tableContent.innerHTML = tableHTML;
+        }
+        
+        function updateStats() {
+            const registrations = JSON.parse(localStorage.getItem('allRegistrations')) || [];
+            
+            document.getElementById('totalCount').textContent = registrations.length;
+            document.getElementById('schoolCount').textContent = registrations.filter(r => r.category === 'School').length;
+            document.getElementById('collegeCount').textContent = registrations.filter(r => r.category === 'College').length;
+            document.getElementById('employeeCount').textContent = registrations.filter(r => r.category === 'Employee').length;
+        }
+        
+        function filterTable() {
+            const searchValue = document.getElementById('searchInput').value.toLowerCase();
+            const categoryValue = document.getElementById('categoryFilter').value;
+            const batchValue = document.getElementById('batchFilter').value;
+            
+            let filteredData = allRegistrations.filter(student => {
+                const matchesSearch = student.name.toLowerCase().includes(searchValue) || 
+                                    student.fatherName.toLowerCase().includes(searchValue);
+                const matchesCategory = !categoryValue || student.category === categoryValue;
+                const matchesBatch = !batchValue || student.batch.includes(batchValue);
+                
+                return matchesSearch && matchesCategory && matchesBatch;
+            });
+            
+            displayTable(filteredData);
+        }
+        
+        function deleteRegistration(id) {
+            if (confirm('Are you sure you want to delete this registration?')) {
+                allRegistrations = allRegistrations.filter(student => student.id !== id);
+                localStorage.setItem('allRegistrations', JSON.stringify(allRegistrations));
+                loadRegistrations();
+                updateStats();
+            }
+        }
+        
+        function clearAllData() {
+            if (confirm('⚠️ Are you sure you want to delete ALL registrations? This cannot be undone!')) {
+                if (confirm('🚨 FINAL WARNING: This will permanently delete all data!')) {
+                    localStorage.removeItem('allRegistrations');
+                    allRegistrations = [];
+                    loadRegistrations();
+                    updateStats();
+                    alert('✅ All data has been cleared!');
+                }
+            }
+        }
+        
+        function exportToCSV() {
+            if (allRegistrations.length === 0) {
+                alert('No data to export!');
+                return;
+            }
+            
+            let csv = 'Name,Father Name,Category,Batch,Time,Registered On\n';
+            
+            allRegistrations.forEach(student => {
+                csv += `"${student.name}","${student.fatherName}","${student.category}","${student.batch}","${student.time}","${student.registeredDate || 'N/A'}"\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `anbu_registrations_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+        
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('adminLoggedIn');
+                window.location.href = 'admin_login.html';
+            }
+        }
+    </script>
+</body>
+</html>
